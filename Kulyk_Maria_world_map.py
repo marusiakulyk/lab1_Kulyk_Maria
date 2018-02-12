@@ -42,7 +42,7 @@ def main(year):
 
     # creating a layer with film markers
     fg = folium.FeatureGroup(name="Population")
-    k = 0
+    k = 1
     for i in range(len(f)):
         if k == number:
             break
@@ -63,10 +63,18 @@ def main(year):
     fg1 = folium.FeatureGroup(name="Population")
     fg1.add_child(folium.GeoJson(data=open('world.json',
                                            encoding='utf-8-sig').read(),
-                                 style_function=lambda x: {"fillColor": "green" if x["properties"]["POP2005"] < 10000000
+                                 style_function=lambda x: {"fillColor": "green" if x["properties"]["POP2005"] < 1000000
+                                 else "yellow" if 1000000 <= x["properties"]["POP2005"] < 10000000
                                  else "orange" if 10000000 <= x["properties"]["POP2005"] < 20000000
                                  else "red"}))
     map.add_child(fg1)
+
+    # creating a layer
+    fg2 = folium.FeatureGroup(name="Ukraine")
+    fg2.add_child(folium.GeoJson(data=open('world.json',encoding='utf-8-sig').read(),
+                                 style_function=lambda x: {"fillColor": "purple" if x["properties"]["NAME"] == "Ukraine"
+                                 else "grey"}))
+    map.add_child(fg2)
 
     map.add_child(folium.LayerControl())
     map.save("Map_5.html")
